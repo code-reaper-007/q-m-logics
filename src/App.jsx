@@ -8,6 +8,7 @@ import { AnalyticsHUD } from './components/AnalyticsHUD';
 import { Walkthrough } from './components/Walkthrough';
 import { TutorialOverlay } from './components/Tutorial';
 import { LabReportExport } from './components/LabReportExport';
+import { TeamSection } from './components/TeamSection';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function App() {
@@ -167,7 +168,7 @@ function App() {
 
         <header className="h-16 flex items-center justify-between px-8 border-b border-white/5 relative z-10 backdrop-blur-md">
           <div className="flex gap-8 h-full" data-tutorial="tab-navigation">
-            {["circuit", "steps", "walkthrough", "table"].map((tab) => (
+            {["circuit", "steps", "walkthrough", "table", "team"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -251,14 +252,16 @@ function App() {
               )}
 
               {activeTab === "table" && (
-                <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar min-h-0">
-                  <TruthTable 
-                    variables={variables} 
-                    minterms={minterms}
-                    dontCares={dontCares}
-                    mode={mode}
-                  />
-                </div>
+                <TruthTable 
+                  variables={variables} 
+                  minterms={minterms}
+                  dontCares={dontCares}
+                  mode={mode}
+                />
+              )}
+
+              {activeTab === "team" && (
+                <TeamSection />
               )}
             </motion.div>
           </AnimatePresence>
