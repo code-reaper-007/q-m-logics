@@ -4,28 +4,59 @@ import ReactFlow, {
   Controls, 
   MiniMap, 
   applyNodeChanges,
+  applyEdgeChanges,
   MarkerType,
+  useReactFlow,
+  ReactFlowProvider,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { GateNode } from './GateNode';
-import { Download, FileText } from 'lucide-react';
+import { Download, FileText, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import { toPng, toSvg } from 'html-to-image';
 
 const nodeTypes = {
   gate: GateNode,
 };
 
-export const CircuitCanvas = ({ finalTerms, variables, mode = 'SOP' }) => {
+const edgeTypes = {};
+
+const defaultEdgeOptions = {
+  type: 'smoothstep',
+  animated: false,
+  style: {
+    stroke: 'rgba(255,255,255,0.15)',
+    strokeWidth: 1,
+    strokeDasharray: '4 4',
+  },
+  markerEnd: {
+    type: MarkerType.ArrowClosed,
+    width: 10,
+    height: 10,
+    color: 'rgba(255,255,255,0.2)',
+  },
+};
+
+function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [inputStates, setInputStates] = useState({});
+  const [isExporting, setIsExporting] = useState(false);
   const canvasRef = useRef(null);
-  const isMobile = useRef(window.innerWidth < 768);
+  const reactFlowWrapper = useRef(null);
+  const { fitView, zoomIn, zoomOut, setCenter } = useReactFlow();
 
   const accentColor = mode === 'POS' ? '#bc13fe' : '#00f3ff';
+  const cyan = '#00f3ff';
+  const purple = '#bc13fe';
+  const pink = '#ff00ff';
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+    []
+  );
+
+  const onEdgesChange = useCallback(
+    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
     []
   );
 
@@ -43,15 +74,15 @@ export const CircuitCanvas = ({ finalTerms, variables, mode = 'SOP' }) => {
     const newEdges = [];
     const varNames = Array.from({ length: variables }, (_, i) => String.fromCharCode(65 + i));
     
-    const spacingY = isMobile.current ? 70 : 90;
-    const spacingX = isMobile.current ? 180 : 120;
+    const spacingY = 100;
+    const spacingX = 140;
 
     varNames.forEach((name, i) => {
       newNodes.push({
         id: `in-${name}`,
         type: 'gate',
         data: { label: name, type: 'INPUT', varName: name, mode },
-        position: { x: 30, y: i * spacingY + 30 },
+        position: { x: 40, y: i * spacingY + 50 },
       });
     });
 
@@ -68,14 +99,12 @@ export const CircuitCanvas = ({ finalTerms, variables, mode = 'SOP' }) => {
               id: notId,
               type: 'gate',
               data: { label: 'NOT', type: 'NOT', mode },
-              position: { x: 180, y: i * spacingY + 30 },
+              position: { x: 200, y: i * spacingY + 50 },
             });
             newEdges.push({
               id: `e-in-${varName}-not`,
               source: `in-${varName}`,
               target: notId,
-              animated: false,
-              markerEnd: { type: MarkerType.ArrowClosed, width: 8, height: 8, color: 'rgba(255,255,255,0.1)' },
             });
             invertedNodes.add(varName);
           }
@@ -100,7 +129,7 @@ export const CircuitCanvas = ({ finalTerms, variables, mode = 'SOP' }) => {
           id: gateId,
           type: 'gate',
           data: { label: gateType, type: gateType, mode },
-          position: { x: 330, y: idx * spacingX + 30 },
+          position: { x: 360, y: idx * spacingX + 50 },
         });
         termNodes.push(gateId);
 
@@ -111,8 +140,6 @@ export const CircuitCanvas = ({ finalTerms, variables, mode = 'SOP' }) => {
             id: `e-${sourceId}-${gateId}`,
             source: sourceId,
             target: gateId,
-            animated: false,
-            markerEnd: { type: MarkerType.ArrowClosed, width: 8, height: 8, color: 'rgba(255,255,255,0.1)' },
           });
         });
       }
@@ -124,38 +151,39 @@ export const CircuitCanvas = ({ finalTerms, variables, mode = 'SOP' }) => {
     } else if (termNodes.length > 1) {
       const finalGateId = mode === 'SOP' ? 'or-final' : 'and-final';
       const finalGateType = mode === 'SOP' ? 'OR' : 'AND';
+      const termCount = termNodes.length;
+      const firstY = (termNodes.length > 0 && finalTerms[termCount - 1]) 
+        ? termCount * spacingX + 50 
+        : 150;
+      
       newNodes.push({
         id: finalGateId,
         type: 'gate',
         data: { label: finalGateType, type: finalGateType, mode },
-        position: { x: 510, y: Math.max(60, (termNodes.length * spacingX) / 2 - 60) },
+        position: { x: 520, y: Math.max(100, (firstY - 50) / 2 + 50) },
       });
       termNodes.forEach((tId) => {
         newEdges.push({
           id: `e-${tId}-${finalGateId}`,
           source: tId,
           target: finalGateId,
-          animated: false,
-          markerEnd: { type: MarkerType.ArrowClosed, width: 8, height: 8, color: 'rgba(255,255,255,0.1)' },
         });
       });
       lastId = finalGateId;
     }
 
     if (lastId) {
-      const outY = Math.max(60, (termNodes.length * spacingX) / 2 - 60);
+      const outY = termNodes.length > 1 ? Math.max(100, (termNodes.length * spacingX) / 2 + 25) : 50;
       newNodes.push({
         id: 'out-y',
         type: 'gate',
         data: { label: 'OUT', type: 'OUTPUT', mode },
-        position: { x: 660, y: outY },
+        position: { x: 680, y: outY },
       });
       newEdges.push({
         id: `e-${lastId}-out`,
         source: lastId,
         target: 'out-y',
-        animated: false,
-        markerEnd: { type: MarkerType.ArrowClosed, width: 8, height: 8, color: 'rgba(255,255,255,0.1)' },
       });
     }
 
@@ -225,88 +253,166 @@ export const CircuitCanvas = ({ finalTerms, variables, mode = 'SOP' }) => {
         ...e,
         animated: isActive,
         style: {
-          stroke: isActive ? accentColor : 'rgba(255,255,255,0.08)',
-          strokeWidth: isActive ? 3 : 1,
+          stroke: isActive ? cyan : 'rgba(255,255,255,0.12)',
+          strokeWidth: isActive ? 2 : 1,
+          strokeDasharray: isActive ? '6 3' : '4 4',
+          transition: 'stroke 0.3s ease, stroke-width 0.3s ease',
         },
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          width: 8,
-          height: 8,
-          color: isActive ? accentColor : 'rgba(255,255,255,0.1)',
+          width: isActive ? 12 : 10,
+          height: isActive ? 12 : 10,
+          color: isActive ? cyan : 'rgba(255,255,255,0.2)',
         },
       };
     });
 
     setNodes(updatedNodes);
     setEdges(updatedEdges);
-  }, [graphTopology, inputStates, toggleInput, mode, accentColor]);
 
-  const exportImage = (format) => {
-    const el = canvasRef.current?.querySelector('.react-flow__viewport') || canvasRef.current;
-    if (!el) return;
+    setTimeout(() => {
+      fitView({ padding: 0.2, duration: 400 });
+    }, 100);
+  }, [graphTopology, inputStates, toggleInput, mode, fitView]);
+
+  const exportImage = async (format) => {
+    const el = canvasRef.current?.querySelector('.react-flow__viewport');
+    if (!el || isExporting) return;
+    
+    setIsExporting(true);
     const fn = format === 'png' ? toPng : toSvg;
-    fn(el, {
-      backgroundColor: '#050505',
-      pixelRatio: 2,
-    }).then((dataUrl) => {
+    
+    try {
+      const dataUrl = await fn(el, {
+        backgroundColor: '#050505',
+        pixelRatio: 2,
+        style: {
+          transform: 'none',
+        }
+      });
       const link = document.createElement('a');
       link.download = `qm-logics-circuit-${mode.toLowerCase()}.${format}`;
       link.href = dataUrl;
       link.click();
-    }).catch(err => console.error('Export failed:', err));
+    } catch (err) {
+      console.error('Export failed:', err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleResetView = () => {
+    fitView({ padding: 0.2, duration: 400 });
   };
 
   return (
-    <div ref={canvasRef} className="flex-1 relative h-full min-h-0 group bg-cyber-grid border border-white/5 rounded-xl overflow-hidden shadow-2xl" data-tutorial="circuit-canvas">
-      <div className="absolute top-3 right-3 z-10 flex gap-2">
-        <button 
-          onClick={() => exportImage('png')}
-          className="flex items-center gap-1.5 px-3 py-1.5 glass hover:bg-white/10 transition-colors text-[10px] font-bold text-white shadow-xl"
-        >
-          <Download className="w-3 h-3" /> PNG
-        </button>
-        <button 
-          onClick={() => exportImage('svg')}
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 glass hover:bg-white/10 transition-colors text-[10px] font-bold text-white shadow-xl"
-        >
-          <FileText className="w-3 h-3" /> SVG
-        </button>
+    <div ref={canvasRef} className="flex-1 relative h-full min-h-0 bg-[#050505]">
+      {/* Control bar */}
+      <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between pointer-events-none">
+        <div className="flex items-center gap-3 pointer-events-auto">
+          <div className="glass px-3 py-2 flex items-center gap-2 border border-white/10">
+            <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: accentColor }} />
+            <span className="text-[10px] font-mono font-bold tracking-wider" style={{ color: accentColor }}>
+              {mode} MODE
+            </span>
+          </div>
+          <div className="glass px-3 py-2 text-[10px] text-white/40 font-mono border border-white/10 hidden sm:block">
+            Tap inputs to simulate
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 pointer-events-auto">
+          <button 
+            onClick={zoomIn}
+            className="glass p-2 hover:bg-white/10 transition-colors border border-white/10"
+          >
+            <ZoomIn className="w-3.5 h-3.5 text-white/60" />
+          </button>
+          <button 
+            onClick={zoomOut}
+            className="glass p-2 hover:bg-white/10 transition-colors border border-white/10"
+          >
+            <ZoomOut className="w-3.5 h-3.5 text-white/60" />
+          </button>
+          <button 
+            onClick={handleResetView}
+            className="glass p-2 hover:bg-white/10 transition-colors border border-white/10"
+          >
+            <Maximize2 className="w-3.5 h-3.5 text-white/60" />
+          </button>
+          <div className="w-px h-6 bg-white/10 mx-1 hidden sm:block" />
+          <button 
+            onClick={() => exportImage('png')}
+            disabled={isExporting}
+            className="glass px-3 py-2 hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-1.5 disabled:opacity-50"
+          >
+            <Download className="w-3 h-3 text-white/60" />
+            <span className="text-[10px] font-bold text-white/60 hidden sm:inline">PNG</span>
+          </button>
+          <button 
+            onClick={() => exportImage('svg')}
+            disabled={isExporting}
+            className="glass px-3 py-2 hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-1.5 disabled:opacity-50 hidden sm:flex"
+          >
+            <FileText className="w-3 h-3 text-white/60" />
+            <span className="text-[10px] font-bold text-white/60">SVG</span>
+          </button>
+        </div>
       </div>
 
-      <div className="absolute top-3 left-3 z-10 glass px-2.5 py-1.5 text-[9px] font-mono" style={{ color: accentColor }}>
-        {mode} MODE — Tap inputs to simulate
+      {/* ReactFlow Canvas */}
+      <div ref={reactFlowWrapper} className="absolute inset-0">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          defaultEdgeOptions={defaultEdgeOptions}
+          fitView
+          fitViewOptions={{ padding: 0.2 }}
+          className="w-full h-full"
+          panOnScroll
+          zoomOnScroll
+          panOnDrag
+          minZoom={0.1}
+          maxZoom={4}
+          attributionPosition="bottom-right"
+          proOptions={{ hideAttribution: true }}
+        >
+          <Background 
+            color="rgba(255,255,255,0.04)" 
+            gap={24} 
+            size={1} 
+            variant="dots"
+          />
+          <Controls showInteractive={false} className="!bg-transparent !border-0 !shadow-none !bottom-20 !right-4" />
+          <MiniMap 
+            nodeColor={(n) => {
+              if (n.data.type === 'AND') return cyan;
+              if (n.data.type === 'OR') return purple;
+              if (n.data.type === 'NOT') return pink;
+              return 'rgba(255,255,255,0.15)';
+            }}
+            nodeBorderRadius={8}
+            maskColor="rgba(5,5,5,0.85)"
+            className="!bg-transparent !border-0 !shadow-none"
+            style={{
+              backgroundColor: 'rgba(20,20,20,0.8)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '8px',
+            }}
+          />
+        </ReactFlow>
       </div>
-
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        nodeTypes={nodeTypes}
-        fitView
-        fitViewOptions={{ padding: 0.15 }}
-        className="w-full h-full"
-        defaultEdgeOptions={{
-          type: 'smoothstep',
-        }}
-        panOnScroll
-        zoomOnScroll
-        panOnDrag
-        minZoom={0.2}
-        maxZoom={3}
-      >
-        <Background color="rgba(255,255,255,0.03)" gap={20} size={1} />
-        <Controls className="fill-white bg-[#111] border-white/10 shadow-xl" />
-        <MiniMap 
-          nodeColor={(n) => {
-            if (n.data.type === 'AND') return accentColor;
-            if (n.data.type === 'OR') return '#bc13fe';
-            if (n.data.type === 'NOT') return '#ff00ff';
-            return 'rgba(255,255,255,0.2)';
-          }}
-          maskColor="rgba(0,0,0,0.85)"
-          className="bg-[#050505] border-white/10 shadow-2xl"
-        />
-      </ReactFlow>
     </div>
   );
-};
+}
+
+export const CircuitCanvas = React.memo((props) => (
+  <ReactFlowProvider>
+    <CanvasContent {...props} />
+  </ReactFlowProvider>
+));

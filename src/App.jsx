@@ -265,14 +265,14 @@ function App() {
               className="h-full flex flex-col min-h-0"
             >
               {results && activeTab === "circuit" && (
-                <div className="flex flex-col gap-4 lg:gap-6 h-full min-h-0">
+                <div className="flex flex-col h-full min-h-0">
                   <Dashboard 
                     before={analytics.before}
                     after={analytics.after}
                     simplifiedExpression={results.expression}
                     mode={mode}
                   />
-                  <div className="flex-1 min-h-0">
+                  <div className="flex-1 min-h-0 mt-4">
                     <CircuitCanvas 
                       finalTerms={results.finalTerms} 
                       variables={variables}
