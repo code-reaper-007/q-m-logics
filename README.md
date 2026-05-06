@@ -1,4 +1,4 @@
-# Noctis Logic Synthesizer
+# Q-M Logics
 
 > A dual-mode Boolean optimization suite that transforms raw logic requirements into highly optimized, interactive circuit schematics using the **Quine-McCluskey algorithm**.
 
@@ -24,9 +24,9 @@
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🧠 Logic Engine
+###  Logic Engine
 - **Quine-McCluskey algorithm** implemented in a **Web Worker** for non-blocking computation
 - **Bitmasking & integer comparisons** for O(3ⁿ) efficiency
 - Supports up to **10 variables** (1024-row truth tables)
@@ -35,7 +35,7 @@
   - **POS** (Product of Sums) — optimizes for logic `0`s (Maxterms)
 - Don't Care conditions support for further simplification
 
-### 🎨 UI/UX Design
+###  UI/UX Design
 - **Deep nocturnal cyber-minimalist** aesthetic (`#050505` background)
 - **Mode-aware accent colors:**
   - SOP → Cyan (`#00f3ff`) glow & highlights
@@ -44,7 +44,7 @@
 - **Framer Motion** spring-loaded entry animations on all tables and results
 - Responsive layout with professional dark theme
 
-### ⚡ Interactive Logic Canvas
+###  Interactive Logic Canvas
 - **React Flow**-based circuit visualization
 - **IEEE-standard SVG logic gate symbols** (AND, OR, NOT, NAND, NOR, XOR, XNOR)
 - **Live signal simulation:**
@@ -54,7 +54,7 @@
 - Zoom, pan, and minimap navigation
 - Export circuit as **PNG** or **SVG**
 
-### 🎓 Student Learning Tools
+###  Student Learning Tools
 - **Interactive tutorial** (React Joyride) — 8-step guided walkthrough
 - **Algorithm Walkthrough panel** — 6 expandable steps:
   1. Input Specification
@@ -67,13 +67,13 @@
 - **Gate Reduction** analytics — percentage saved vs. unoptimized
 - **Transistor count** estimation
 
-### 📄 Export
+###  Export
 - **Lab Report** download — full `.txt` report with all algorithm steps, truth table, and LaTeX expression
 - **Circuit PNG/SVG** export for documentation
 
 ---
 
-## 🖼️ Screenshots
+##  Screenshots
 
 | SOP Mode (Cyan) | POS Mode (Purple) |
 |-----------------|-------------------|
@@ -82,7 +82,7 @@
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Category | Technology |
 |----------|-----------|
@@ -97,7 +97,7 @@
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -136,7 +136,7 @@ npm run preview
 
 ---
 
-## 📖 Usage Guide
+##  Usage Guide
 
 ### 1. Select Optimization Mode
 
@@ -179,7 +179,7 @@ Click **Synthesize** to run the Quine-McCluskey algorithm. Results appear instan
 
 ---
 
-## 🧮 Algorithm
+##  Algorithm
 
 ### Quine-McCluskey Method
 
@@ -210,7 +210,7 @@ let newMask = t1.mask | diff;
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 noctis-logic-synthesizer/
@@ -246,7 +246,7 @@ noctis-logic-synthesizer/
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 ### Theme Colors
 
@@ -269,7 +269,7 @@ No environment variables required. The app runs entirely client-side.
 
 ---
 
-## 🧪 Testing the Algorithm
+##  Testing the Algorithm
 
 Run the included test script:
 
@@ -293,7 +293,7 @@ console.log(pos.solve().expression); // (B' + C) · (A' + B)
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome! Here's how:
 
@@ -312,13 +312,13 @@ Contributions are welcome! Here's how:
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **Quine-McCluskey algorithm** — W.V. Quine (1952), Edward J. McCluskey (1956)
 - **React Flow** — [reactflow.dev](https://reactflow.dev)
@@ -328,5 +328,5 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 ---
 
 <p align="center">
-  Built with ⚡ React + Vite &nbsp;|&nbsp; Noctis Logic Synthesizer © 2026
+  Built with ⚡ React + Vite &nbsp;|&nbsp; Q-M Logics © 2026
 </p>

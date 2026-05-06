@@ -22,8 +22,8 @@ export const Sidebar = ({
           <Cpu className="w-6 h-6 text-accent-cyan" />
         </div>
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-white">Noctis Logic Pro</h1>
-          <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-medium mt-1">Bitmask Engine V2.0</p>
+          <h1 className="text-xl font-bold tracking-tight text-white">Q-M Logics</h1>
+          <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-medium mt-1">Quine-McCluskey Engine V2.0</p>
         </div>
       </div>
 

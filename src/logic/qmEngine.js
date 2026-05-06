@@ -1,5 +1,5 @@
 /**
- * Noctis Logic Pro - Bitmasking Quine-McCluskey Engine
+ * Q-M Logics - Bitmasking Quine-McCluskey Engine
  * Supports SOP (Minterms) and POS (Maxterms) modes.
  * Optimized for up to 10 variables using integer bitwise operations.
  */

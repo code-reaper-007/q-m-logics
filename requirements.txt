@@ -1,4 +1,4 @@
-# Noctis Logic Synthesizer - Requirements
+# Q-M Logics - Requirements
 # Node.js project (npm/yarn/pnpm)
 
 # Runtime Requirement
