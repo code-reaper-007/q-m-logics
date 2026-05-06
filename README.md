@@ -82,6 +82,23 @@
 
 ---
 
+## 👥 Team — SP3
+
+<p align="center">
+
+![Team SP3](./public/050927c5-736a-4fad-90be-c5679b1e024b.png)
+
+| Roll Number | Name |
+|-------------|------|
+| RA2511036010519 | SOUJATA MAJI |
+| RA2511036010534 | PRANAY KUMAR SINGH |
+| RA2511036010537 | PRASHANT KUMAR DAS |
+| RA2511036010542 | PIYUSH RAJ |
+
+</p>
+
+---
+
 ##  Tech Stack
 
 | Category | Technology |
