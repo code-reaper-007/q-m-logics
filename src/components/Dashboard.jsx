@@ -24,44 +24,44 @@ export const Dashboard = ({ before, after, simplifiedExpression, mode = 'SOP' })
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-6">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass p-6 flex items-center justify-between border border-white/5"
+        className="glass p-4 lg:p-6 flex items-center justify-between border border-white/5"
       >
         <div className="space-y-1">
-          <p className="text-xs font-bold text-white/40 uppercase tracking-widest">Original Terms</p>
-          <p className="text-3xl font-bold text-white">{before}</p>
+          <p className="text-[10px] lg:text-xs font-bold text-white/40 uppercase tracking-widest">Original Terms</p>
+          <p className="text-2xl lg:text-3xl font-bold text-white">{before}</p>
         </div>
-        <Layers className="w-10 h-10 text-white/10" />
+        <Layers className="w-8 h-8 lg:w-10 lg:h-10 text-white/10" />
       </motion.div>
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="glass p-6 flex items-center justify-between border border-white/5"
+        className="glass p-4 lg:p-6 flex items-center justify-between border border-white/5"
       >
         <div className="space-y-1">
-          <p className="text-xs font-bold text-white/40 uppercase tracking-widest">Optimized Terms</p>
-          <p className="text-3xl font-bold" style={{ color: accent }}>{after}</p>
+          <p className="text-[10px] lg:text-xs font-bold text-white/40 uppercase tracking-widest">Optimized Terms</p>
+          <p className="text-2xl lg:text-3xl font-bold" style={{ color: accent }}>{after}</p>
         </div>
-        <Zap className="w-10 h-10 text-white/10" />
+        <Zap className="w-8 h-8 lg:w-10 lg:h-10 text-white/10" />
       </motion.div>
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="glass p-6 border border-white/5 flex flex-col justify-center gap-3 relative"
+        className="glass p-4 lg:p-6 border border-white/5 flex flex-col justify-center gap-3 relative sm:col-span-2 lg:col-span-1"
       >
-        <p className="text-xs font-bold text-white/40 uppercase tracking-widest">Minimized Expression</p>
+        <p className="text-[10px] lg:text-xs font-bold text-white/40 uppercase tracking-widest">Minimized Expression</p>
         <div className="flex items-center justify-between">
-          <p className="text-lg font-mono font-bold truncate pr-10" style={{ color: accent }}>{simplifiedExpression}</p>
+          <p className="text-sm sm:text-lg font-mono font-bold truncate pr-10" style={{ color: accent }}>{simplifiedExpression}</p>
           <button 
             onClick={copyToClipboard}
-            className="absolute right-6 p-2 rounded-md hover:bg-white/10 transition-colors text-white/40 hover:text-white"
+            className="absolute right-4 lg:right-6 p-2 rounded-md hover:bg-white/10 transition-colors text-white/40 hover:text-white"
           >
             {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
           </button>

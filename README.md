@@ -125,8 +125,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/noctis-logic-synthesizer.git
-cd noctis-logic-synthesizer
+git clone https://github.com/YOUR_USERNAME/Q-M_Logics.git
+cd Q-M_Logics
 
 # Install dependencies
 npm install
@@ -230,7 +230,7 @@ let newMask = t1.mask | diff;
 ##  Project Structure
 
 ```
-noctis-logic-synthesizer/
+Q-M_Logics/
 ├── public/                  # Static assets
 │   ├── favicon.svg
 │   └── icons.svg

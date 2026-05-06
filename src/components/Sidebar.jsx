@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cpu, List, Hash, Settings2 } from 'lucide-react';
+import { Cpu, List, Hash, Settings2, X } from 'lucide-react';
 
 export const Sidebar = ({ 
   variables, 
@@ -11,15 +11,24 @@ export const Sidebar = ({
   onSolve,
   isSolving,
   mode,
-  setMode
+  setMode,
+  onClose
 }) => {
   const accentColor = mode === 'POS' ? '#bc13fe' : '#00f3ff';
 
   return (
-    <aside className="w-80 h-full border-r border-white/5 bg-[#050505] flex flex-col p-6 gap-8 overflow-y-auto relative z-20 shadow-[10px_0_30px_rgba(0,0,0,0.8)]">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-accent-cyan/10 flex items-center justify-center border border-accent-cyan/40 shadow-[0_0_15px_rgba(0,243,255,0.15)]">
-          <Cpu className="w-6 h-6 text-accent-cyan" />
+    <aside className="w-80 h-full border-r border-white/5 bg-[#050505] flex flex-col p-4 lg:p-6 gap-6 lg:gap-8 overflow-y-auto relative z-50 shadow-[10px_0_30px_rgba(0,0,0,0.8)]">
+      {/* Mobile close button */}
+      <button 
+        onClick={onClose}
+        className="lg:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-white/10 transition-colors"
+      >
+        <X className="w-5 h-5 text-white/50" />
+      </button>
+
+      <div className="flex items-center gap-3 mt-2">
+        <div className="w-10 h-10 rounded-lg flex items-center justify-center border shadow-[0_0_15px_rgba(0,243,255,0.15)]" style={{ backgroundColor: `${accentColor}10`, borderColor: `${accentColor}40` }}>
+          <Cpu className="w-6 h-6" style={{ color: accentColor }} />
         </div>
         <div>
           <h1 className="text-xl font-bold tracking-tight text-white">Q-M Logics</h1>
@@ -27,7 +36,7 @@ export const Sidebar = ({
         </div>
       </div>
 
-      <div className="space-y-8 mt-4">
+      <div className="space-y-6 lg:space-y-8 mt-2">
         <div className="space-y-4" data-tutorial="mode-toggle">
           <label className="text-xs font-bold text-white/50 uppercase tracking-wider flex items-center gap-2">
             <Settings2 className="w-4 h-4" />
@@ -71,7 +80,7 @@ export const Sidebar = ({
           <input 
             type="range" 
             min="2" 
-            max="4" 
+            max="10" 
             value={variables} 
             onChange={(e) => setVariables(parseInt(e.target.value))}
             className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer"
@@ -79,7 +88,7 @@ export const Sidebar = ({
           />
           <div className="flex justify-between text-[9px] text-white/30 font-mono">
             <span>2</span>
-            <span>4</span>
+            <span>10</span>
           </div>
         </div>
 
@@ -91,9 +100,8 @@ export const Sidebar = ({
           <textarea
             value={mintermsInput}
             onChange={(e) => setMintermsInput(e.target.value)}
-            placeholder={mode === 'SOP' ? "e.g. 0, 1, 3, 7 (Max 15)" : "e.g. 0, 2, 5, 6 (Max 15)"}
-            className="w-full h-28 bg-white/[0.02] border border-white/10 rounded-xl p-4 text-white font-mono text-sm focus:outline-none transition-all resize-none shadow-inner"
-            style={{ '--focus-border': accentColor }}
+            placeholder={mode === 'SOP' ? "e.g. 0, 1, 3, 7" : "e.g. 0, 2, 5, 6"}
+            className="w-full h-20 lg:h-28 bg-white/[0.02] border border-white/10 rounded-xl p-3 lg:p-4 text-white font-mono text-sm focus:outline-none transition-all resize-none shadow-inner"
             onFocus={(e) => e.target.style.borderColor = `${accentColor}80`}
             onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
           />
@@ -107,9 +115,9 @@ export const Sidebar = ({
           <textarea
             value={dontCaresInput}
             onChange={(e) => setDontCaresInput(e.target.value)}
-            placeholder="e.g. 2, 5 (Max 15)"
-            className="w-full h-20 bg-white/[0.02] border border-white/10 rounded-xl p-4 text-white font-mono text-sm focus:outline-none focus:border-accent-purple/50 focus:bg-white/[0.04] transition-all resize-none shadow-inner"
-            onFocus={(e) => e.target.style.borderColor = '#bc13fe80'}
+            placeholder="e.g. 2, 5"
+            className="w-full h-16 lg:h-20 bg-white/[0.02] border border-white/10 rounded-xl p-3 lg:p-4 text-white font-mono text-sm focus:outline-none transition-all resize-none shadow-inner"
+            onFocus={(e) => e.target.style.borderColor = `${accentColor}80`}
             onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
           />
         </div>
@@ -118,12 +126,11 @@ export const Sidebar = ({
           onClick={onSolve}
           disabled={isSolving}
           data-tutorial="synthesize-btn"
-          className={`w-full h-14 rounded-xl font-bold uppercase tracking-[0.2em] text-xs transition-all duration-300 relative overflow-hidden group ${
+          className={`w-full h-12 lg:h-14 rounded-xl font-bold uppercase tracking-[0.2em] text-xs transition-all duration-300 relative overflow-hidden group ${
             isSolving 
               ? 'bg-white/5 border border-white/10 text-white/30 cursor-not-allowed' 
               : 'bg-white/5 border border-white/20 text-white hover:shadow-[0_0_20px_rgba(0,243,255,0.2)]'
           }`}
-          style={mode === 'SOP' ? {} : {}}
           onMouseEnter={(e) => {
             if (!isSolving) {
               e.target.style.borderColor = accentColor;
