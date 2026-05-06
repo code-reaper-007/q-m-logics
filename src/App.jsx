@@ -9,6 +9,7 @@ import { Walkthrough } from './components/Walkthrough';
 import { TutorialOverlay } from './components/Tutorial';
 import { LabReportExport } from './components/LabReportExport';
 import { TeamSection } from './components/TeamSection';
+import { DeviceBanner } from './components/DeviceBanner';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function App() {
@@ -267,6 +268,7 @@ function App() {
           </AnimatePresence>
         </div>
       </main>
+      <DeviceBanner />
     </div>
   );
 }
