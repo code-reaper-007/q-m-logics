@@ -211,25 +211,28 @@ function App() {
               <Menu className="w-5 h-5 text-white/70" />
             </button>
 
-            <div className="flex gap-4 lg:gap-8 h-full overflow-x-auto scrollbar-hide">
-              {["circuit", "steps", "walkthrough", "table", "team"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`h-full px-1 lg:px-2 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] transition-all relative group whitespace-nowrap ${
-                    activeTab === tab ? "text-white" : "text-white/30 hover:text-white/60"
-                  }`}
-                >
-                  {tab}
-                  {activeTab === tab && (
-                    <motion.div 
-                      layoutId="activeTab"
-                      className="absolute bottom-0 left-0 right-0 h-1"
-                      style={{ backgroundColor: accentColor }}
-                    />
-                  )}
-                </button>
-              ))}
+            <div className="relative flex-1 max-w-[60vw] lg:max-w-none">
+              <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-[#050505]/90 to-transparent pointer-events-none lg:hidden z-10" />
+              <div className="flex gap-3 lg:gap-8 h-full overflow-x-auto scrollbar-hide overscroll-x-contain" style={{ scrollBehavior: 'smooth', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+                {[{ id: 'circuit', label: 'CIRCUIT' }, { id: 'steps', label: 'STEPS' }, { id: 'walkthrough', label: 'WALKTHROUGH' }, { id: 'table', label: 'TABLE' }, { id: 'team', label: 'TEAM' }].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`h-full px-2 lg:px-3 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] transition-all relative group whitespace-nowrap flex-shrink-0 ${
+                      activeTab === tab.id ? "text-white" : "text-white/30 hover:text-white/60"
+                    }`}
+                  >
+                    {tab.label}
+                    {activeTab === tab.id && (
+                      <motion.div 
+                        layoutId="activeTab"
+                        className="absolute bottom-0 left-0 right-0 h-1"
+                        style={{ backgroundColor: accentColor }}
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
