@@ -277,26 +277,27 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
   }, [graphTopology, inputStates, toggleInput, mode, fitView]);
 
   const exportImage = async (format) => {
-    const el = canvasRef.current?.querySelector('.react-flow__viewport');
-    if (!el || isExporting) return;
+    const flowContainer = canvasRef.current?.querySelector('.react-flow__renderer');
+    const reactFlow = canvasRef.current?.querySelector('.react-flow');
+    if ((!flowContainer && !reactFlow) || isExporting) return;
     
     setIsExporting(true);
     const fn = format === 'png' ? toPng : toSvg;
     
     try {
-      fitView({ padding: 0.4, duration: 300 });
+      fitView({ padding: 0.3, duration: 300 });
       
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 400));
       
-      const dataUrl = await fn(el, {
+      const target = reactFlow || canvasRef.current;
+      const dataUrl = await fn(target, {
         backgroundColor: '#050505',
-        pixelRatio: 1,
-        width: 512,
-        height: 512,
-        style: {
-          transform: 'none',
+        pixelRatio: 2,
+        filterNode: (node) => {
+          return !node.classList?.contains('react-flow__controls') &&
+                 !node.classList?.contains('react-flow__minimap');
         },
-        quality: 1,
+        cacheBust: true,
       });
       const link = document.createElement('a');
       link.download = `qm-logics-circuit-${mode.toLowerCase()}.${format}`;
