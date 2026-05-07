@@ -1,6 +1,5 @@
 import React from 'react';
 import { List, Hash, Settings2, X } from 'lucide-react';
-import { AdUnit } from './AdUnit';
 
 export const Sidebar = ({ 
   variables, 
@@ -152,8 +151,6 @@ export const Sidebar = ({
             <div className="absolute inset-0 bg-gradient-to-r from-accent-cyan/0 via-accent-cyan/10 to-accent-cyan/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
           )}
         </button>
-
-        <AdUnit type="sidebar" className="!h-[200px] lg:!h-[250px]" />
       </div>
     </aside>
   );

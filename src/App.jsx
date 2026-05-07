@@ -7,7 +7,6 @@ import { CircuitCanvas } from './components/CircuitCanvas';
 import { Walkthrough } from './components/Walkthrough';
 import { LabReportExport } from './components/LabReportExport';
 import { TeamSection } from './components/TeamSection';
-import { AdUnit } from './components/AdUnit';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu } from 'lucide-react';
 
@@ -297,17 +296,16 @@ function App() {
           </div>
         </header>
 
-        <div className="flex-1 relative min-h-0 flex">
-          <div className="flex-1 flex flex-col min-h-0 p-3 sm:p-4 lg:p-8 overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`${activeTab}-${mode}`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3, type: "spring", bounce: 0.15 }}
-                className="h-full flex flex-col min-h-0"
-              >
+        <div className="flex-1 relative p-3 sm:p-4 lg:p-8 overflow-hidden min-h-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${activeTab}-${mode}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3, type: "spring", bounce: 0.15 }}
+              className="h-full flex flex-col min-h-0"
+            >
               {results && activeTab === "circuit" && (
                 <div className="flex flex-col h-full min-h-0">
                   <Dashboard 
@@ -358,11 +356,6 @@ function App() {
               )}
             </motion.div>
           </AnimatePresence>
-          </div>
-
-          <div className="hidden lg:flex flex-col items-center justify-center w-[160px] border-l border-white/5 p-3 bg-[#080808]">
-            <AdUnit type="rectangle" className="!w-[120px] !h-[600px]" />
-          </div>
         </div>
       </main>
     </div>
