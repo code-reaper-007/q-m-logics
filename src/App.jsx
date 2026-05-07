@@ -4,13 +4,11 @@ import { Dashboard } from './components/Dashboard';
 import { GroupingTables } from './components/GroupingTables';
 import { TruthTable } from './components/TruthTable';
 import { CircuitCanvas } from './components/CircuitCanvas';
-import { AnalyticsHUD } from './components/AnalyticsHUD';
 import { Walkthrough } from './components/Walkthrough';
-import { TutorialOverlay } from './components/Tutorial';
 import { LabReportExport } from './components/LabReportExport';
 import { TeamSection } from './components/TeamSection';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 function App() {
   const [variables, setVariables] = useState(4);
@@ -22,7 +20,6 @@ function App() {
   const [results, setResults] = useState(null);
   const [activeTab, setActiveTab] = useState("circuit");
   const [mode, setMode] = useState("SOP");
-  const [showTutorial, setShowTutorial] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const workerRef = useRef(null);
@@ -142,7 +139,6 @@ function App() {
       className="flex h-screen bg-[#050505] text-white overflow-hidden font-sans"
       style={{ '--accent': accentColor }}
     >
-      {/* Mobile menu overlay */}
       <AnimatePresence>
         {sidebarOpen && (
           <>
@@ -178,7 +174,6 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* Desktop sidebar */}
       <div className="hidden lg:block">
         <Sidebar 
           variables={variables}
@@ -216,7 +211,7 @@ function App() {
               <Menu className="w-5 h-5 text-white/70" />
             </button>
 
-            <div className="flex gap-4 lg:gap-8 h-full overflow-x-auto scrollbar-hide" data-tutorial="tab-navigation">
+            <div className="flex gap-4 lg:gap-8 h-full overflow-x-auto scrollbar-hide">
               {["circuit", "steps", "walkthrough", "table", "team"].map((tab) => (
                 <button
                   key={tab}
@@ -250,7 +245,6 @@ function App() {
                 />
               </div>
             )}
-            <TutorialOverlay showTutorial={showTutorial} setShowTutorial={setShowTutorial} mode={mode} />
           </div>
         </header>
 
@@ -279,11 +273,6 @@ function App() {
                       mode={mode}
                     />
                   </div>
-                  <AnalyticsHUD 
-                    gateReduction={analytics.reduction} 
-                    transistorCount={analytics.transistors}
-                    mode={mode}
-                  />
                 </div>
               )}
 

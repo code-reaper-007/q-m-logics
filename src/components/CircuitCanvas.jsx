@@ -2,7 +2,6 @@ import React, { useCallback, useState, useEffect, useMemo, useRef } from 'react'
 import ReactFlow, { 
   Background, 
   Controls, 
-  MiniMap, 
   applyNodeChanges,
   applyEdgeChanges,
   MarkerType,
@@ -388,23 +387,6 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
             variant="dots"
           />
           <Controls showInteractive={false} className="!bg-transparent !border-0 !shadow-none !bottom-20 !right-4" />
-          <MiniMap 
-            nodeColor={(n) => {
-              if (n.data.type === 'AND') return cyan;
-              if (n.data.type === 'OR') return purple;
-              if (n.data.type === 'NOT') return pink;
-              return 'rgba(255,255,255,0.15)';
-            }}
-            nodeBorderRadius={8}
-            maskColor="rgba(5,5,5,0.85)"
-            className="!bg-transparent !border-0 !shadow-none"
-            style={{
-              backgroundColor: 'rgba(20,20,20,0.8)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '8px',
-            }}
-          />
         </ReactFlow>
       </div>
     </div>

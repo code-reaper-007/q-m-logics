@@ -232,7 +232,7 @@ let newMask = t1.mask | diff;
 ```
 Q-M_Logics/
 ├── public/                  # Static assets
-│   ├── favicon.svg
+│   ├── project-logo.ico
 │   └── icons.svg
 ├── src/
 │   ├── components/          # React components

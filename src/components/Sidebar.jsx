@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cpu, List, Hash, Settings2, X } from 'lucide-react';
+import { List, Hash, Settings2, X } from 'lucide-react';
 
 export const Sidebar = ({ 
   variables, 
@@ -18,7 +18,6 @@ export const Sidebar = ({
 
   return (
     <aside className="w-80 h-full border-r border-white/5 bg-[#050505] flex flex-col p-4 lg:p-6 gap-6 lg:gap-8 overflow-y-auto relative z-50 shadow-[10px_0_30px_rgba(0,0,0,0.8)]">
-      {/* Mobile close button */}
       <button 
         onClick={onClose}
         className="lg:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-white/10 transition-colors"
@@ -26,18 +25,12 @@ export const Sidebar = ({
         <X className="w-5 h-5 text-white/50" />
       </button>
 
-      <div className="flex items-center gap-3 mt-2">
-        <div className="w-10 h-10 rounded-lg flex items-center justify-center border shadow-[0_0_15px_rgba(0,243,255,0.15)]" style={{ backgroundColor: `${accentColor}10`, borderColor: `${accentColor}40` }}>
-          <Cpu className="w-6 h-6" style={{ color: accentColor }} />
-        </div>
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-white">Q-M Logics</h1>
-          <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-medium mt-1">Quine-McCluskey Engine V2.0</p>
-        </div>
+      <div className="mt-2">
+        <h1 className="text-xl font-bold tracking-tight text-white">Q-M Logics</h1>
       </div>
 
       <div className="space-y-6 lg:space-y-8 mt-2">
-        <div className="space-y-4" data-tutorial="mode-toggle">
+        <div className="space-y-4">
           <label className="text-xs font-bold text-white/50 uppercase tracking-wider flex items-center gap-2">
             <Settings2 className="w-4 h-4" />
             Optimization Mode
@@ -69,7 +62,7 @@ export const Sidebar = ({
           </p>
         </div>
 
-        <div className="space-y-4" data-tutorial="variables-slider">
+        <div className="space-y-4">
           <div className="flex justify-between items-center">
             <label className="text-xs font-bold text-white/50 uppercase tracking-wider flex items-center gap-2">
               <Settings2 className="w-4 h-4" />
@@ -92,7 +85,7 @@ export const Sidebar = ({
           </div>
         </div>
 
-        <div className="space-y-3" data-tutorial="minterms-input">
+        <div className="space-y-3">
           <label className="text-xs font-bold text-white/50 uppercase tracking-wider flex items-center gap-2">
             <List className="w-4 h-4" />
             {mode === 'SOP' ? 'Minterms (1s)' : 'Maxterms (0s)'}
@@ -107,7 +100,7 @@ export const Sidebar = ({
           />
         </div>
 
-        <div className="space-y-3" data-tutorial="dontcare-input">
+        <div className="space-y-3">
           <label className="text-xs font-bold text-white/50 uppercase tracking-wider flex items-center gap-2">
             <Hash className="w-4 h-4" />
             Don't Cares
@@ -125,7 +118,6 @@ export const Sidebar = ({
         <button
           onClick={onSolve}
           disabled={isSolving}
-          data-tutorial="synthesize-btn"
           className={`w-full h-12 lg:h-14 rounded-xl font-bold uppercase tracking-[0.2em] text-xs transition-all duration-300 relative overflow-hidden group ${
             isSolving 
               ? 'bg-white/5 border border-white/10 text-white/30 cursor-not-allowed' 
