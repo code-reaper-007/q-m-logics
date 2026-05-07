@@ -284,12 +284,25 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
     const fn = format === 'png' ? toPng : toSvg;
     
     try {
+      fitView({ padding: 0.4, duration: 300 });
+      
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const viewportRect = el.getBoundingClientRect();
+      const isMobile = window.innerWidth <= 768;
+      const pixelRatio = isMobile ? 3 : 2;
+      const width = isMobile ? Math.max(viewportRect.width, 1080) : viewportRect.width;
+      const height = isMobile ? Math.max(viewportRect.height, 1920) : viewportRect.height;
+      
       const dataUrl = await fn(el, {
         backgroundColor: '#050505',
-        pixelRatio: 2,
+        pixelRatio,
+        width,
+        height,
         style: {
           transform: 'none',
-        }
+        },
+        quality: 1,
       });
       const link = document.createElement('a');
       link.download = `qm-logics-circuit-${mode.toLowerCase()}.${format}`;
