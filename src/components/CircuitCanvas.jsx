@@ -342,6 +342,20 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
 
         <div className="flex items-center gap-2 pointer-events-auto">
           <button 
+            onClick={() => exportImage('png')}
+            disabled={isExporting}
+            className="sm:hidden p-2.5 rounded-lg flex items-center justify-center transition-colors border disabled:opacity-50"
+            style={{ 
+              backgroundColor: 'rgba(15, 15, 15, 0.95)',
+              borderColor: `${accentColor}40`,
+              minWidth: '44px',
+              minHeight: '44px',
+            }}
+          >
+            <Download className="w-5 h-5" style={{ color: accentColor }} />
+          </button>
+
+          <button 
             onClick={zoomIn}
             className="glass p-2 hover:bg-white/10 transition-colors border border-white/10"
           >
@@ -363,10 +377,10 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
           <button 
             onClick={() => exportImage('png')}
             disabled={isExporting}
-            className="glass px-3 py-2 hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-1.5 disabled:opacity-50"
+            className="glass px-3 py-2 hover:bg-white/10 transition-colors border border-white/10 flex items-center gap-1.5 disabled:opacity-50 hidden sm:flex"
           >
             <Download className="w-3 h-3 text-white/60" />
-            <span className="text-[10px] font-bold text-white/60 hidden sm:inline">PNG</span>
+            <span className="text-[10px] font-bold text-white/60">PNG</span>
           </button>
           <button 
             onClick={() => exportImage('svg')}
