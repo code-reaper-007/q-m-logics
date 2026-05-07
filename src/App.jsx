@@ -21,31 +21,69 @@ function App() {
   const [activeTab, setActiveTab] = useState("circuit");
   const [mode, setMode] = useState("SOP");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [lastSolveTime, setLastSolveTime] = useState(0);
 
   const workerRef = useRef(null);
+  const workerTimeoutRef = useRef(null);
+
+  const COOLDOWN_MS = 1000;
+
+  const sanitizeInput = (input) => {
+    return input.replace(/[^0-9,\s-]/g, '').trim();
+  };
 
   const parseNumbers = useCallback((input, maxVal) => {
-    return input
+    const cleaned = sanitizeInput(input);
+    return cleaned
       .split(',')
       .map(s => parseInt(s.trim()))
       .filter(n => !isNaN(n) && n >= 0 && n <= 15 && n < maxVal);
   }, []);
 
   const handleSolve = useCallback(() => {
+    const now = Date.now();
+    if (now - lastSolveTime < COOLDOWN_MS) {
+      setError('Please wait before synthesizing again.');
+      return;
+    }
+
     if (workerRef.current) {
+      if (workerTimeoutRef.current) {
+        clearTimeout(workerTimeoutRef.current);
+        workerRef.current.terminate();
+        workerRef.current = new Worker(new URL('./logic/qm.worker.js', import.meta.url), { type: 'module' });
+        setupWorker();
+      }
+
       setIsLoading(true);
+      setIsSolving(true);
       setError(null);
+      setLastSolveTime(now);
+
       const maxVal = Math.pow(2, variables);
       const minterms = parseNumbers(mintermsInput, maxVal);
       const dontCares = parseNumbers(dontCaresInput, maxVal);
+
+      if (minterms.length > 1024 || dontCares.length > 1024) {
+        setError('Too many terms. Maximum 1024 allowed.');
+        setIsLoading(false);
+        setIsSolving(false);
+        return;
+      }
+
+      workerTimeoutRef.current = setTimeout(() => {
+        setError('Computation timed out. Reduce terms or variables.');
+        setIsLoading(false);
+        setIsSolving(false);
+      }, 12000);
+
       workerRef.current.postMessage({ variables, minterms, dontCares, mode });
     }
-  }, [variables, mintermsInput, dontCaresInput, mode, parseNumbers]);
+  }, [variables, mintermsInput, dontCaresInput, mode, parseNumbers, lastSolveTime]);
 
-  useEffect(() => {
-    workerRef.current = new Worker(new URL('./logic/qm.worker.js', import.meta.url), { type: 'module' });
-    
+  const setupWorker = useCallback(() => {
     workerRef.current.onmessage = (e) => {
+      if (workerTimeoutRef.current) clearTimeout(workerTimeoutRef.current);
       setIsLoading(false);
       setIsSolving(false);
       if (e.data.success) {
@@ -58,16 +96,23 @@ function App() {
     };
 
     workerRef.current.onerror = (err) => {
+      if (workerTimeoutRef.current) clearTimeout(workerTimeoutRef.current);
       console.error("Worker error:", err);
       setError("An unexpected error occurred in logic engine.");
       setIsLoading(false);
       setIsSolving(false);
     };
+  }, []);
+
+  useEffect(() => {
+    workerRef.current = new Worker(new URL('./logic/qm.worker.js', import.meta.url), { type: 'module' });
+    setupWorker();
 
     return () => {
+      if (workerTimeoutRef.current) clearTimeout(workerTimeoutRef.current);
       if (workerRef.current) workerRef.current.terminate();
     };
-  }, []);
+  }, [setupWorker]);
 
   useEffect(() => {
     handleSolve();

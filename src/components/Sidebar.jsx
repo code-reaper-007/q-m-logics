@@ -92,7 +92,7 @@ export const Sidebar = ({
           </label>
           <textarea
             value={mintermsInput}
-            onChange={(e) => setMintermsInput(e.target.value)}
+            onChange={(e) => setMintermsInput(e.target.value.replace(/[^0-9,\s-]/g, ''))}
             placeholder={mode === 'SOP' ? "e.g. 0, 1, 3, 7" : "e.g. 0, 2, 5, 6"}
             className="w-full h-20 lg:h-28 bg-white/[0.02] border border-white/10 rounded-xl p-3 lg:p-4 text-white font-mono text-sm focus:outline-none transition-all resize-none shadow-inner"
             onFocus={(e) => e.target.style.borderColor = `${accentColor}80`}
@@ -107,7 +107,7 @@ export const Sidebar = ({
           </label>
           <textarea
             value={dontCaresInput}
-            onChange={(e) => setDontCaresInput(e.target.value)}
+            onChange={(e) => setDontCaresInput(e.target.value.replace(/[^0-9,\s-]/g, ''))}
             placeholder="e.g. 2, 5"
             className="w-full h-16 lg:h-20 bg-white/[0.02] border border-white/10 rounded-xl p-3 lg:p-4 text-white font-mono text-sm focus:outline-none transition-all resize-none shadow-inner"
             onFocus={(e) => e.target.style.borderColor = `${accentColor}80`}
