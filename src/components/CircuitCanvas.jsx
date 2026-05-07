@@ -277,9 +277,8 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
   }, [graphTopology, inputStates, toggleInput, mode, fitView]);
 
   const exportImage = async (format) => {
-    const flowContainer = canvasRef.current?.querySelector('.react-flow__renderer');
     const reactFlow = canvasRef.current?.querySelector('.react-flow');
-    if ((!flowContainer && !reactFlow) || isExporting) return;
+    if (!reactFlow || isExporting) return;
     
     setIsExporting(true);
     const fn = format === 'png' ? toPng : toSvg;
@@ -288,17 +287,25 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
       fitView({ padding: 0.3, duration: 300 });
       
       await new Promise(resolve => setTimeout(resolve, 400));
+
+      const controlsEl = canvasRef.current?.querySelector('.react-flow__controls');
+      const minimapEl = canvasRef.current?.querySelector('.react-flow__minimap');
+      const headerEl = canvasRef.current?.querySelector('.react-flow__panel');
       
-      const target = reactFlow || canvasRef.current;
-      const dataUrl = await fn(target, {
+      if (controlsEl) controlsEl.style.display = 'none';
+      if (minimapEl) minimapEl.style.display = 'none';
+      if (headerEl) headerEl.style.display = 'none';
+      
+      const dataUrl = await fn(reactFlow, {
         backgroundColor: '#050505',
         pixelRatio: 2,
-        filterNode: (node) => {
-          return !node.classList?.contains('react-flow__controls') &&
-                 !node.classList?.contains('react-flow__minimap');
-        },
         cacheBust: true,
       });
+      
+      if (controlsEl) controlsEl.style.display = '';
+      if (minimapEl) minimapEl.style.display = '';
+      if (headerEl) headerEl.style.display = '';
+      
       const link = document.createElement('a');
       link.download = `qm-logics-circuit-${mode.toLowerCase()}.${format}`;
       link.href = dataUrl;
