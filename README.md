@@ -9,21 +9,6 @@
 
 ---
 
-##  Table of Contents
-
-- [Features](#-features)
-- [Screenshots](#-screenshots)
-- [Tech Stack](#-tech-stack)
-- [Getting Started](#-getting-started)
-- [Usage Guide](#-usage-guide)
-- [Algorithm](#-algorithm)
-- [Project Structure](#-project-structure)
-- [Configuration](#-configuration)
-- [Contributing](#-contributing)
-- [License](#-license)
-
----
-
 ##  Features
 
 ###  Logic Engine
