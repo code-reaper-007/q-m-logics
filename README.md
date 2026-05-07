@@ -265,10 +265,6 @@ colors: {
 }
 ```
 
-### Environment Variables
-
-No environment variables required. The app runs entirely client-side.
-
 ---
 
 ##  Testing the Algorithm
@@ -326,9 +322,3 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 - **React Flow** — [reactflow.dev](https://reactflow.dev)
 - **Framer Motion** — [framer.com/motion](https://www.framer.com/motion/)
 - **Lucide Icons** — [lucide.dev](https://lucide.dev)
-
----
-
-<p align="center">
-  Built with ⚡ React + Vite &nbsp;|&nbsp; Q-M Logics © 2026
-</p>
