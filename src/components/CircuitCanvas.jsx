@@ -39,6 +39,7 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [inputStates, setInputStates] = useState({});
+  const [outputActive, setOutputActive] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const canvasRef = useRef(null);
   const reactFlowWrapper = useRef(null);
@@ -268,6 +269,7 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
 
     setNodes(updatedNodes);
     setEdges(updatedEdges);
+    setOutputActive(!!nodeStates['out-y']);
 
     setTimeout(() => {
       fitView({ padding: 0.2, duration: 400 });
@@ -315,6 +317,24 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
               {mode} MODE
             </span>
           </div>
+
+          <div className="glass px-3 py-2 flex items-center gap-2 border border-white/10">
+            <div className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              outputActive 
+                ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)] animate-pulse' 
+                : 'bg-white/20'
+            }`} />
+            <span className={`text-[10px] font-mono font-bold tracking-wider transition-colors ${
+              outputActive
+                ? 'text-green-400'
+                : 'text-white/40'
+            }`}>
+              {outputActive 
+                ? 'CONDUCTING' 
+                : 'NO CURRENT'}
+            </span>
+          </div>
+
           <div className="glass px-3 py-2 text-[10px] text-white/40 font-mono border border-white/10 hidden sm:block">
             Tap inputs to simulate
           </div>

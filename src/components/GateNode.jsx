@@ -33,7 +33,17 @@ export const GateNode = memo(({ data }) => {
   };
 
   const getInputIcon = () => {
-    if (isInput) return <Activity className={`w-4 h-4 ${isActive ? 'animate-pulse' : ''}`} style={{ color: isActive ? accent : 'rgba(255,255,255,0.4)' }} />;
+    if (isInput) {
+      return (
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-md border border-white/30 flex items-center justify-center bg-white/5">
+            <span className="text-xs font-bold text-white">
+              {isActive ? '+' : '−'}
+            </span>
+          </div>
+        </div>
+      );
+    }
     if (isOutput) return <Zap className={`w-5 h-5 ${isActive ? 'text-yellow-400 fill-yellow-400' : 'text-white/30'}`} />;
     return null;
   };
