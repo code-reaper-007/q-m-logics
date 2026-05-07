@@ -291,10 +291,12 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
       const controlsEl = canvasRef.current?.querySelector('.react-flow__controls');
       const minimapEl = canvasRef.current?.querySelector('.react-flow__minimap');
       const headerEl = canvasRef.current?.querySelector('.react-flow__panel');
+      const modeIndicator = canvasRef.current?.querySelector('[data-export="hide"]');
       
       if (controlsEl) controlsEl.style.display = 'none';
       if (minimapEl) minimapEl.style.display = 'none';
       if (headerEl) headerEl.style.display = 'none';
+      if (modeIndicator) modeIndicator.style.display = 'none';
       
       const dataUrl = await fn(reactFlow, {
         backgroundColor: '#050505',
@@ -305,6 +307,7 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
       if (controlsEl) controlsEl.style.display = '';
       if (minimapEl) minimapEl.style.display = '';
       if (headerEl) headerEl.style.display = '';
+      if (modeIndicator) modeIndicator.style.display = '';
       
       const link = document.createElement('a');
       link.download = `qm-logics-circuit-${mode.toLowerCase()}.${format}`;
@@ -324,7 +327,7 @@ function CanvasContent({ finalTerms, variables, mode = 'SOP' }) {
   return (
     <div ref={canvasRef} className="flex-1 relative h-full min-h-0 bg-[#050505]">
       {/* Control bar */}
-      <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between pointer-events-none">
+      <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between pointer-events-none" data-export="hide">
         <div className="flex items-center gap-3 pointer-events-auto">
           <div className="glass px-3 py-2 flex items-center gap-2 border border-white/10">
             <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: accentColor }} />
